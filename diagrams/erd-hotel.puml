@@ -1,0 +1,56 @@
+@startuml
+hide methods
+hide stereotypes
+skinparam linetype ortho
+
+entity "Guest" as Guest {
+  * GuestID : INT <<PK>>
+  Name : VARCHAR
+  Phone : VARCHAR
+  Email : VARCHAR
+  Address : VARCHAR
+}
+entity "RoomType" as RoomType {
+  * TypeID : INT <<PK>>
+  Name : VARCHAR
+  Price : DECIMAL(10,2)
+  Capacity : INT
+  Description : TEXT
+}
+entity "Room" as Room {
+  * RoomID : INT <<PK>>
+  TypeID : INT <<FK>>
+  Status : VARCHAR
+  Floor : INT
+}
+entity "Reservation" as Reservation {
+  * ResvID : INT <<PK>>
+  GuestID : INT <<FK>>
+  RoomID  : INT <<FK>>
+  StaffID : INT <<FK>>
+  CheckInDate  : DATE
+  CheckOutDate : DATE
+  Status : VARCHAR
+}
+entity "Payment" as Payment {
+  * PaymentID : INT <<PK>>
+  ResvID : INT <<FK>>
+  Amount : DECIMAL(10,2)
+  Method : VARCHAR
+  Status : VARCHAR
+  Date   : DATETIME
+}
+entity "Staff" as Staff {
+  * StaffID : INT <<PK>>
+  Name : VARCHAR
+  Role : VARCHAR
+  Username : VARCHAR
+  PasswordHash : VARCHAR
+}
+
+Guest ||--o{ Reservation
+Reservation ||--o{ Payment
+RoomType ||--o{ Room
+Room ||--o{ Reservation
+Staff ||--o{ Reservation
+@enduml
