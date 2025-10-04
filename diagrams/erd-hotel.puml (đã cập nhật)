@@ -1,0 +1,18 @@
+entity "HousekeepingTask" as HKTask {
+  * TaskID : INT <<PK>>
+  RoomID : INT <<FK>>
+  ResvID : INT <<FK>>
+  AssignedTo : INT <<FK>>  ' StaffID (nhân viên buồng phòng)
+  Status : VARCHAR          ' NEW → IN_PROGRESS → DONE
+  CreatedAt : DATETIME
+}
+
+Room ||--o{ HKTask : "1-N"
+Reservation ||--o{ HKTask : "1-N"
+Staff ||--o{ HKTask : "1-N (housekeeping)"
+
+note right of Room
+  On Check-out:
+  - set Room.Status = 'Dirty'
+  - create HKTask for cleaning
+end note
