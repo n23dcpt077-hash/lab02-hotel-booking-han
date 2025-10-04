@@ -1,0 +1,7 @@
+Nội dung mẫu:
+
+# Revenue Report Notes
+- Source: Payment(Status=SUCCESS)
+- Filters: date range
+- Group by: RoomType
+- Output: total amount, count reservations; export CSV
