@@ -1,7 +1,30 @@
-Nội dung mẫu:
+# Revenue Report Notes (LAB02-9)
 
-# Revenue Report Notes
-- Source: Payment(Status=SUCCESS)
-- Filters: date range
-- Group by: RoomType
-- Output: total amount, count reservations; export CSV
+## Source
+- Table: Payment
+- Only include records where Status = 'SUCCESS'
+- Join Reservation -> Room -> RoomType to aggregate by type
+
+## Filters
+- Date range (Payment.Date BETWEEN :from AND :to)
+
+## Group By
+- RoomType (TypeID / Name)
+
+## Output
+- Total amount (SUM(Amount))
+- Count of reservations (COUNT(DISTINCT ResvID))
+- Export CSV
+
+## (Optional) Pseudo SQL
+SELECT rt.Name AS RoomType,
+       COUNT(DISTINCT p.ResvID) AS Reservations,
+       SUM(p.Amount) AS Revenue
+FROM Payment p
+JOIN Reservation r ON r.ResvID = p.ResvID
+JOIN Room rm ON rm.RoomID = r.RoomID
+JOIN RoomType rt ON rt.TypeID = rm.TypeID
+WHERE p.Status = 'SUCCESS'
+  AND p.Date BETWEEN :from AND :to
+GROUP BY rt.Name
+ORDER BY Revenue DESC;
