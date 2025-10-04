@@ -1,0 +1,56 @@
+CREATE TABLE Guest (
+  GuestID INT PRIMARY KEY,
+  Name VARCHAR(100) NOT NULL,
+  Phone VARCHAR(20),
+  Email VARCHAR(120),
+  Address VARCHAR(255)
+);
+
+CREATE TABLE RoomType (
+  TypeID INT PRIMARY KEY,
+  Name VARCHAR(50) NOT NULL,
+  Price DECIMAL(10,2) NOT NULL,
+  Capacity INT NOT NULL,
+  Description TEXT
+);
+
+CREATE TABLE Room (
+  RoomID INT PRIMARY KEY,
+  TypeID INT NOT NULL,
+  Status VARCHAR(20) NOT NULL,
+  Floor INT,
+  CONSTRAINT fk_room_type FOREIGN KEY (TypeID) REFERENCES RoomType(TypeID)
+);
+
+CREATE TABLE Staff (
+  StaffID INT PRIMARY KEY,
+  Name VARCHAR(100) NOT NULL,
+  Role VARCHAR(30) NOT NULL,
+  Username VARCHAR(60) UNIQUE,
+  PasswordHash VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Reservation (
+  ResvID INT PRIMARY KEY,
+  GuestID INT NOT NULL,
+  RoomID  INT NOT NULL,
+  StaffID INT,
+  CheckInDate  DATE NOT NULL,
+  CheckOutDate DATE NOT NULL,
+  Status VARCHAR(20) NOT NULL,
+  CONSTRAINT fk_resv_guest FOREIGN KEY (GuestID) REFERENCES Guest(GuestID),
+  CONSTRAINT fk_resv_room  FOREIGN KEY (RoomID)  REFERENCES Room(RoomID),
+  CONSTRAINT fk_resv_staff FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
+);
+
+CREATE TABLE Payment (
+  PaymentID INT PRIMARY KEY,
+  ResvID INT NOT NULL,
+  Amount DECIMAL(10,2) NOT NULL,
+  Method VARCHAR(20) NOT NULL,
+  Status VARCHAR(20) NOT NULL,
+  Date   DATETIME NOT NULL,
+  CONSTRAINT fk_pay_resv FOREIGN KEY (ResvID) REFERENCES Reservation(ResvID)
+);
+
+
